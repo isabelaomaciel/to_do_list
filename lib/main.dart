@@ -18,13 +18,16 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('ToDo List'),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: ListView(
           children: [
             Task('Aprender Flutter'),
             Task('Andar de bike'),
             Task('Meditar'),
             Task('Aprender Inglês'),
+            Task('Lavar a louça'),
+            Task('Ler um livro'),
+            Task('Passear com o cachorro'),
+            Task('Jantar com os amigos'),
           ],
         ),
         floatingActionButton: FloatingActionButton(onPressed: () {}),
@@ -35,11 +38,13 @@ class MyApp extends StatelessWidget {
 
 class Task extends StatelessWidget {
   final String name;
+
   const Task(this.name, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Stack(
         children: [
           Container(
@@ -57,15 +62,23 @@ class Task extends StatelessWidget {
                   width: 72,
                   height: 100,
                 ),
-                Text(name),
+                Container(
+                  width: 200,
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 24,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
                 ElevatedButton(
                     onPressed: () {}, child: Icon(Icons.arrow_drop_up)),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
- 
