@@ -14,7 +14,37 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-  int nivel = 0;
+  int level = 0;
+  int levelMax = 10;
+  int levelColor = 0;
+
+  List listColors = [
+    Colors.blueGrey,
+    Colors.lightBlueAccent,
+    Colors.green,
+    Colors.deepOrange,
+    Colors.amber,
+    Colors.redAccent,
+  ];
+
+  void upNivel(){
+    if(level < (widget.dificuldade * levelMax)){
+      level++;
+    } else {
+      level = 1;
+      if (levelColor < listColors.length - 1){
+        levelColor++;
+      } else {
+        levelColor = 0;
+      }
+    }
+  }
+
+  double incrementProgressBar(){
+    return (widget.dificuldade > 0)
+        ? (level / (widget.dificuldade * levelMax))
+        : 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +55,7 @@ class _TaskState extends State<Task> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: Colors.brown,
+              color: Colors.blueGrey,
             ),
             height: 140,
           ),
@@ -80,7 +110,7 @@ class _TaskState extends State<Task> {
                       child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              nivel++;
+                              upNivel();
                             });
                           },
                           child: Column(
@@ -91,37 +121,40 @@ class _TaskState extends State<Task> {
                               Text(
                                 'UP',
                                 style: TextStyle(fontSize: 12),
-                              )
-                            ],
+                              ),
+                            ]
                           )),
                     ),
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 200,
-                      child: LinearProgressIndicator(
-                        color: Colors.white,
-                        value: (widget.dificuldade > 0)
-                            ? (nivel / widget.dificuldade) / 10
-                            : 1,
+
+
+              Container(
+                color: listColors[levelColor],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 200,
+                        child: LinearProgressIndicator(
+                          color: Colors.white,
+                          value: incrementProgressBar(),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text('Nivel: $nivel',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        )),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Text('Nivel: $level',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -130,3 +163,6 @@ class _TaskState extends State<Task> {
     );
   }
 }
+//Quando sua tarefa chegar no nível máximo de maestria (ou seja, a barra de progresso estiver toda preenchida), a tarefa deve MUDAR DE COR.
+// Faça vários níveis diferentes de maestria, indicados por diferentes cores!
+// Lembre-se de que com dificuldades diferentes, as maestrias demoram mais!

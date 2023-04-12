@@ -78,7 +78,7 @@ class _InitialScreenState extends State<InitialScreen> {
             opacidade = !opacidade;
           });
         },
-        backgroundColor: Colors.brown[100],
+        backgroundColor: Colors.blueGrey[300],
         child: const Icon(Icons.remove_red_eye),
       ),
 
