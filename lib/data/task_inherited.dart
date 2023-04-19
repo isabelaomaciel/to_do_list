@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../components/task.dart';
+import 'package:to_do/components/task.dart';
 
 class TaskInherited extends InheritedWidget {
    TaskInherited({
@@ -21,14 +20,15 @@ class TaskInherited extends InheritedWidget {
     taskList.add(Task(name, photo, difficulty));
   }
 
-  static TaskInherited of(BuildContext context) {
-    final TaskInherited? result = context.dependOnInheritedWidgetOfExactType<>();
-    assert(result != null, 'No  found in context');
-    return result!;
-  }
+   static TaskInherited of(BuildContext context) {
+     final TaskInherited? result =
+     context.dependOnInheritedWidgetOfExactType<TaskInherited>();
+     assert(result != null, 'No TaskInherited found in context');
+     return result!;
+   }
 
-  @override
-  bool updateShouldNotify( old) {
-    return ;
-  }
+   @override
+   bool updateShouldNotify(TaskInherited oldWidget) {
+     return oldWidget.taskList.length != taskList.length;
+   }
 }

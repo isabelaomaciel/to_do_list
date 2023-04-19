@@ -6,17 +6,26 @@ class Task extends StatefulWidget {
   final String foto;
   final int dificuldade;
 
-  const Task(this.name, this.foto, this.dificuldade, {Key? key})
+  Task(this.name, this.foto, this.dificuldade, {Key? key})
       : super(key: key);
+
+  int level = 0;
+  int levelMax = 10;
+  int levelColor = 0;
+
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-  int level = 0;
-  int levelMax = 10;
-  int levelColor = 0;
+
+  bool assetOrNetwork() {
+    if (widget.foto.contains('http')) {
+      return false;
+    }
+    return true;
+  }
 
   List listColors = [
     Colors.blueGrey,
@@ -27,22 +36,22 @@ class _TaskState extends State<Task> {
     Colors.redAccent,
   ];
 
-  void upNivel(){
-    if(level < (widget.dificuldade * levelMax)){
-      level++;
+  void upNivel() {
+    if (widget.level < (widget.dificuldade * widget.levelMax)) {
+      widget.level++;
     } else {
-      level = 1;
-      if (levelColor < listColors.length - 1){
-        levelColor++;
+      widget.level = 1;
+      if (widget.levelColor < listColors.length - 1) {
+        widget.levelColor++;
       } else {
-        levelColor = 0;
+        widget.levelColor = 0;
       }
     }
   }
 
-  double incrementProgressBar(){
+  double incrementProgressBar() {
     return (widget.dificuldade > 0)
-        ? (level / (widget.dificuldade * levelMax))
+        ? (widget.level / (widget.dificuldade * widget.levelMax))
         : 0;
   }
 
@@ -55,7 +64,7 @@ class _TaskState extends State<Task> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: Colors.blueGrey,
+              color: listColors[widget.levelColor],
             ),
             height: 140,
           ),
@@ -75,14 +84,19 @@ class _TaskState extends State<Task> {
                         borderRadius: BorderRadius.circular(4),
                         color: Colors.black12,
                       ),
+                      width: 72,
+                      height: 100,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Image.asset(
-                          widget.foto,
-                          height: 100,
-                          width: 72,
-                          fit: BoxFit.cover,
-                        ),
+                          borderRadius: BorderRadius.circular(4),
+                          child: assetOrNetwork()
+                              ? Image.asset(
+                                  widget.foto,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                              widget.foto,
+                              fit: BoxFit.cover
+                          ),
                       ),
                     ),
                     Column(
@@ -114,47 +128,42 @@ class _TaskState extends State<Task> {
                             });
                           },
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
-                              Icon(Icons.arrow_drop_up),
-                              Text(
-                                'UP',
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ]
-                          )),
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: const [
+                                Icon(Icons.arrow_drop_up),
+                                Text(
+                                  'UP',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ])),
                     ),
                   ],
                 ),
               ),
 
-
-              Container(
-                color: listColors[levelColor],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 200,
-                        child: LinearProgressIndicator(
-                          color: Colors.white,
-                          value: incrementProgressBar(),
-                        ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 200,
+                      child: LinearProgressIndicator(
+                        color: Colors.white,
+                        value: incrementProgressBar(),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text('Nivel: $level',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          )),
-                    ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text('Nivel: $widget.level',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        )),
+                  ),
+                ],
               ),
             ],
           ),
@@ -163,6 +172,3 @@ class _TaskState extends State<Task> {
     );
   }
 }
-//Quando sua tarefa chegar no nível máximo de maestria (ou seja, a barra de progresso estiver toda preenchida), a tarefa deve MUDAR DE COR.
-// Faça vários níveis diferentes de maestria, indicados por diferentes cores!
-// Lembre-se de que com dificuldades diferentes, as maestrias demoram mais!
