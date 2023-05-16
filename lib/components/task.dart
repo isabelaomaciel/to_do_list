@@ -157,7 +157,7 @@ class _TaskState extends State<Task> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Text('Nivel: $widget.level',
+                    child: Text('Nivel: ${widget.level}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
