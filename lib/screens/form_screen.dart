@@ -49,7 +49,7 @@ class _FormScreenState extends State<FormScreen> {
               height: 650,
               width: 375,
               decoration: BoxDecoration(
-                color: Colors.blueGrey,
+                color: Colors.white54,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(width: 3),
               ),
